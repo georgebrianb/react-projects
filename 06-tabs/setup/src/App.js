@@ -9,7 +9,7 @@ function App() {
   // declaring state variables
   const [loading, setloading] = useState(true);
   const [jobs, setjobs] = useState([]);
-  const [value, setvalue] = useState(1);
+  const [jobIndex, setjobIndex] = useState(1);
 
   // fetching jobs from api
   const fetchJobs = async () => {
@@ -36,7 +36,7 @@ function App() {
     );
   }
 
-  const { company, dates, duties, title } = jobs[value];
+  const { company, dates, duties, title } = jobs[jobIndex];
 
   return (
     <section className="section">
@@ -52,9 +52,9 @@ function App() {
               <button
                 key={item.id}
                 // if job button is pressed, its class will be changed to job-btn active-btn
-                className={`job-btn ${index === value && "active-btn"}`}
+                className={`job-btn ${index === jobIndex && "active-btn"}`}
                 // if clicked, `value` is changed to the index of the job, this value is passed to Job component
-                onClick={(index) => setvalue(index)}
+                onClick={() => setjobIndex(index)}
               >
                 {item.company}
               </button>
