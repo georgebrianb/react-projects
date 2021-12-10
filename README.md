@@ -1,4 +1,4 @@
-This repository is a compliation of all the projects done while following John Smilga's React Course! 
+This repository is a compilation of all the projects done while following John Smilga's React Course! 
 
 # React Projects
 
