@@ -1,4 +1,6 @@
 This repository is a compilation of all the projects done while following John Smilga's React Course! 
+To see each project in action, navigate to the project name (i.e. 09-color-generator) then to the `setup` directory, run `npm install && npm start` and voila!
+
 
 # React Projects
 
