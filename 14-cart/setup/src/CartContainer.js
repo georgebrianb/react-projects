@@ -4,6 +4,7 @@ import { useGlobalContext } from "./context";
 
 const CartContainer = () => {
   const { cart, total, clearCart } = useGlobalContext();
+  console.log(cart);
   if (cart.length === 0) {
     return (
       <section className="cart">
@@ -24,7 +25,6 @@ const CartContainer = () => {
       {/* cart items */}
       <div>
         {cart.map((item) => {
-          console.log(item);
           return <CartItem key={item.id} {...item} />;
         })}
       </div>

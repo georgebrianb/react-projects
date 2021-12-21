@@ -1,5 +1,3 @@
-import CartItem from "./CartItem";
-
 const reducer = (state, action) => {
   switch (action.type) {
     case "CLEAR_CART":
@@ -12,21 +10,19 @@ const reducer = (state, action) => {
       };
     case "TOGGLE_AMOUNT":
       let temporaryCart = state.cart.map((cartItem) => {
-        console.log(cartItem);
         if (cartItem.id === action.payload.id) {
+          console.log("cartitem.id: ", cartItem.id);
+          console.log("action.payload.id: ", action.payload.id);
           if (action.payload.type === "inc") {
             return { ...cartItem, amount: cartItem.amount + 1 };
           }
           if (action.payload.type === "dec") {
             return { ...cartItem, amount: cartItem.amount - 1 };
           }
-          return cartItem;
         }
+        return cartItem;
       });
       return { ...state, cart: temporaryCart };
-    default:
-      return state;
-
     case "GET_TOTAL":
       const { total, amount } = state.cart.reduce(
         (cartTotal, item) => {
@@ -42,8 +38,9 @@ const reducer = (state, action) => {
       return { ...state, loading: true };
     case "DISPLAY_ITEMS":
       return { ...state, cart: action.payload, loading: false };
+    default:
+      throw new Error("no matching action type");
   }
-  throw new Error("no matching action type");
 };
 
 export default reducer;
