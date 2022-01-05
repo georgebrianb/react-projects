@@ -40,14 +40,23 @@ const AppProvider = ({ children }) => {
 
     const response = await axios(url).catch((err) => console.log(err));
     if (response) {
+      // the array of questions is inside response.data.results
       const data = response.data.results;
       if (data.length > 0) {
+        // if there are questions in the response, set the new questions array
+        // set loading to false so we don't see the spinner
+        // set waiting to false so we move on to the modal
+        // set the error so it won't show (back to default)
         setQuestions(data);
         setLoading(false);
         setWaiting(false);
         setError({ show: false, msg: "" });
       }
     } else {
+      // if there's no response / there's an error
+      // set waiting to true so we are still at the setup form
+      // set loading to false so there's no spinner
+      // set error object
       setWaiting(true);
       setLoading(false);
       setError({ show: true, msg: "Could not retrieve questions" });
@@ -59,6 +68,7 @@ const AppProvider = ({ children }) => {
   }, []);
 
   return (
+    //pass on the context vars to the children so it can be accessed anywhere using useGlobalContext() function
     <AppContext.Provider
       value={{
         waiting,
