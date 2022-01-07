@@ -63,16 +63,43 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  // go to next question by incrementing the value of the index.
+  // if the value's higher than the question's array length - 1, we open the modal
+  // and we return 0
   const nextQuestion = () => {
     setIndex((oldIndex) => {
       const index = oldIndex + 1;
       if (index > questions.length - 1) {
-        // openModal()
+        openModal();
         return 0;
       } else {
         return index;
       }
     });
+  };
+
+  // if the value passed to the function is true, increment the correct no. of questions and
+  // go to next question.
+
+  const checkAnswer = (value) => {
+    if (value) {
+      setCorrect((oldState) => oldState + 1);
+    }
+    // display the next question even if the answer is not correct
+    nextQuestion();
+  };
+
+  // open modal function
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // when closing the modal we should get back to setup form that is activated by the "waiting" state variable
+  // We also reset the "Correct" state variable to 0 as we want a fresh start and that's the no. of correct questions of the user
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCorrect(0);
+    setWaiting(true);
   };
 
   useEffect(() => {
@@ -91,6 +118,8 @@ const AppProvider = ({ children }) => {
         isModalOpen,
         correct,
         nextQuestion,
+        checkAnswer,
+        closeModal,
       }}
     >
       {children}

@@ -13,6 +13,7 @@ function App() {
     correct,
     isModalOpen,
     nextQuestion,
+    checkAnswer,
   } = useGlobalContext();
 
   if (waiting) {
@@ -29,11 +30,11 @@ function App() {
 
   return (
     <main>
-      {/* <Modal /> */}
+      <Modal />
       <section className="quiz">
         <p className="correct-answers">
           Correct Answers: {correct} / {questions.length} | Current Question:{" "}
-          {index}
+          {index + 1}
         </p>
 
         <article className="container">
@@ -45,6 +46,7 @@ function App() {
                   key={index}
                   className="answer-btn"
                   dangerouslySetInnerHTML={{ __html: answer }}
+                  onClick={() => checkAnswer(correct_answer === answer)}
                 />
               );
             })}
