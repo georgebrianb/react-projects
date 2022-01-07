@@ -9,7 +9,7 @@ const table = {
 
 const API_ENDPOINT = "https://opentdb.com/api.php?";
 
-const url = "";
+// const url = `${API_ENDPOINT}?amount=${amount}&category=${category}&difficulty=${difficulty}&type=multiple`;
 
 // setting up a temp url to test api fetch
 const tempUrl =
@@ -31,6 +31,20 @@ const AppProvider = ({ children }) => {
   const [error, setError] = useState({ show: false, msg: "" });
   // self-explanatory, used so we know when the Modal (the trivia itself) is open
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [quiz, setQuiz] = useState({
+    amount: 10,
+    category: "sports",
+    difficulty: "easy",
+  });
+
+  // this object is needed so we can translate from category as a string to category as an int.
+  // specific to the api
+  const categories = {
+    sports: 21,
+    science: 17,
+    history: 23,
+  };
 
   const fetchQuestions = async (url) => {
     // when we start fetching questions it means setup form has been submitted so we can set waiting to false
@@ -102,9 +116,23 @@ const AppProvider = ({ children }) => {
     setWaiting(true);
   };
 
-  useEffect(() => {
-    fetchQuestions(tempUrl);
-  }, []);
+  const handleChange = (e) => {
+    // function will handle changing of input values in the setup form
+    const name = e.target.name;
+    const value = e.target.value;
+    setQuiz((oldQuiz) => {
+      return { ...oldQuiz, [name]: value };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    // function used to submit setup form
+    e.preventDefault(); //prevent refreshing the page when submiting
+    const { amount, category, difficulty } = quiz; // destructure the needed variables
+    const url = `${API_ENDPOINT}amount=${amount}&category=${categories[category]}&difficulty=${difficulty}&type=multiple`; // constructing the custom URL for the api
+    console.log(url);
+    fetchQuestions(url);
+  };
 
   return (
     //pass on the context vars to the children so it can be accessed anywhere using useGlobalContext() function
@@ -120,6 +148,9 @@ const AppProvider = ({ children }) => {
         nextQuestion,
         checkAnswer,
         closeModal,
+        quiz,
+        handleChange,
+        handleSubmit,
       }}
     >
       {children}
