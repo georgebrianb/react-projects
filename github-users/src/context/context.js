@@ -3,6 +3,7 @@ import mockUser from "./mockData.js/mockUser";
 import mockRepos from "./mockData.js/mockRepos";
 import mockFollowers from "./mockData.js/mockFollowers";
 import axios from "axios";
+import Followers from "../components/Followers";
 
 const rootUrl = "https://api.github.com";
 const GithubContext = React.createContext();
@@ -43,27 +44,51 @@ const GithubProvider = ({ children }) => {
 
   const getUser = async (user) => {
     toggleError();
-    // setLoading(true)
+    setLoading(true);
     const response = await axios(`${rootUrl}/users/${user}`).catch((err) =>
       console.log(err)
     );
     if (response) {
-      // more logic here
       setGithubUser(response.data);
+      const { login, followers_url, repos_url } = response.data;
+
+      // await all Promises to settle
+      await Promise.allSettled([
+        axios(`${repos_url}?per_page=100`),
+        axios(`${followers_url}?per_page=100`),
+      ])
+        .then((results) => {
+          const [repos, followers] = results;
+          const status = "fulfilled";
+          if (repos.status === status) {
+            setRepos(repos.value.data);
+          }
+          if (followers.status === status) {
+            setFollowers(followers.value.data);
+          }
+        })
+        .catch((err) => console.log(err));
     } else {
       toggleError(true, "The username you are looking for doesn't exist");
     }
+    checkRateLimit();
+    setLoading(false);
   };
 
   useEffect(checkRateLimit, []);
 
-  if (loading) {
-    return;
-  }
-
   return (
     <GithubContext.Provider
-      value={{ githubUser, repos, followers, requests, error, getUser }}
+      value={{
+        githubUser,
+        repos,
+        followers,
+        requests,
+        error,
+        getUser,
+        loading,
+        setLoading,
+      }}
     >
       {children}
     </GithubContext.Provider>
