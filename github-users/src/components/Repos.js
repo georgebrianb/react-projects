@@ -26,7 +26,6 @@ const Repos = () => {
       return b.value - a.value;
     })
     .slice(0, 5);
-  console.log(languages);
 
   // most stars per language
   let mostPopular = Object.values(languages);
@@ -63,7 +62,6 @@ const Repos = () => {
   const mostStars = stars.sort((a, b) => b.value - a.value).splice(0, 5);
   const mostForks = forks.sort((a, b) => b.value - a.value).splice(0, 5);
 
-  console.log(mostPopular);
   return (
     <section className="section">
       <Wrapper className="section-center">

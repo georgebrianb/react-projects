@@ -18,10 +18,6 @@ const Search = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   return (
     <section className="section">
       <Wrapper className="section-center">
